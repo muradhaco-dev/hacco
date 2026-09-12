@@ -42,6 +42,14 @@ export const Hero: React.FC<HeroProps> = ({ currentLang, onNavigate }) => {
     }
   };
 
+  const heroWhatsAppUrl = `https://api.whatsapp.com/send?phone=905319666195&text=${encodeURIComponent(
+    currentLang === 'ar'
+      ? 'مرحباً مهندس مراد حجو، أتواصل معك عبر موقع hacco بخصوص استفسار عن مشروع برمجي جديد.'
+      : currentLang === 'tr'
+      ? 'Merhaba Murad Haco, hacco web sitesinden yeni bir yazılım projesi için ulaşıyorum.'
+      : 'Hello Murad Haco, I am reaching out from the hacco website regarding a new software project.'
+  )}`;
+
   const codeSnippet = `// @hacco/enterprise-core v2.8
 export const systemCluster = defineSystem({
   engine: 'Next.js 15 AppRouter' | 'Flutter Native',
@@ -200,7 +208,7 @@ export const systemCluster = defineSystem({
 
               <div className="grid grid-cols-2 sm:flex items-center gap-2">
                 <a
-                  href="https://wa.me/905319666195"
+                  href={heroWhatsAppUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-xs font-semibold transition-colors"

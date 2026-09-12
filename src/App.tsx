@@ -272,6 +272,7 @@ export default function App() {
         currentLang={currentLang}
         onNavigate={handleNavigate}
         activePage={activePage}
+        onLanguageChange={handleLanguageChange}
       />
 
       {/* Floating Quick WhatsApp & Phone Contact Button */}

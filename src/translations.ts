@@ -166,6 +166,9 @@ export interface TranslationSchema {
       messagePlaceholder: string;
       submitBtn: string;
       submitting: string;
+      sendViaWhatsappDirect: string;
+      sendViaEmailDirect: string;
+      whatsappOpeningNotice: string;
       successTitle: string;
       successMsg: string;
       sendViaEmail: string;
@@ -372,6 +375,9 @@ export const translations: Record<Language, TranslationSchema> = {
         messagePlaceholder: "Describe your project requirements, target users, and key features...",
         submitBtn: "Send Engineering Inquiry",
         submitting: "Preparing Transmission...",
+        sendViaWhatsappDirect: "Send via WhatsApp Directly (+90 531 966 6195)",
+        sendViaEmailDirect: "Send via Email (Gmail)",
+        whatsappOpeningNotice: "Opening WhatsApp to send your inquiry directly to Murad Haco's phone...",
         successTitle: "Inquiry Ready to Send!",
         successMsg: "Your message has been formatted. Click below to deliver it directly to Murad Haco via Gmail or WhatsApp.",
         sendViaEmail: "Open in Gmail / Email Client",
@@ -577,6 +583,9 @@ export const translations: Record<Language, TranslationSchema> = {
         messagePlaceholder: "اشرح لنا متطلبات مشروعك، الجمهور المستهدف، وأهم الميزات المطلوبة...",
         submitBtn: "إرسال الاستفسار الهندسي",
         submitting: "جاري تجهيز البيانات...",
+        sendViaWhatsappDirect: "إرسال الرسالة عبر واتساب مباشرة (+90 531 966 6195)",
+        sendViaEmailDirect: "إرسال عبر البريد الإلكتروني (جيميل)",
+        whatsappOpeningNotice: "جاري فتح واتساب لإرسال رسالتك مباشرة إلى هاتف المهندس مراد حجو...",
         successTitle: "جاهز للإرسال الفوري!",
         successMsg: "تم تنسيق تفاصيل طلبك بنجاح. اضغط أدناه لإرسال الرسالة مباشرة إلى مراد هاكو عبر جيميل أو واتساب.",
         sendViaEmail: "فتح في جيميل / بريدك المفضل",
@@ -782,6 +791,9 @@ export const translations: Record<Language, TranslationSchema> = {
         messagePlaceholder: "Proje gereksinimlerinizi, hedef kullanıcı kitlenizi ve temel özellikleri açıklayın...",
         submitBtn: "Teknik Talebi Gönder",
         submitting: "Hazırlanıyor...",
+        sendViaWhatsappDirect: "Mesajı Doğrudan WhatsApp'a Gönder (+90 531 966 6195)",
+        sendViaEmailDirect: "Gmail / E-posta ile Gönder",
+        whatsappOpeningNotice: "Mesajınızı doğrudan Murad Haco'nun telefonuna iletmek üzere WhatsApp açılıyor...",
         successTitle: "Gönderilmeye Hazır!",
         successMsg: "Mesajınız başarıyla biçimlendirildi. Murad Haco'ya Gmail veya WhatsApp ile doğrudan iletmek için aşağıdaki düğmeleri kullanın.",
         sendViaEmail: "Gmail / E-posta ile İlet",

@@ -32,11 +32,22 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   const [copied, setCopied] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [sendMethod, setSendMethod] = useState<'whatsapp' | 'email'>('whatsapp');
+  const [validationError, setValidationError] = useState('');
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(GMAIL_ADDRESS);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
+  };
+
+  const getServiceTitle = (key: string) => {
+    const list = t.contact.form.servicesList;
+    if (key === 'web') return list.web;
+    if (key === 'mobile') return list.mobile;
+    if (key === 'fullstack') return list.fullstack;
+    if (key === 'consulting') return list.consulting;
+    return key;
   };
 
   const constructEmailBody = () => {
@@ -45,7 +56,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
       `• Name: ${formData.name || 'Not provided'}\n` +
       `• Email: ${formData.email || 'Not provided'}\n` +
       `• Phone: ${formData.phone || 'Not provided'}\n` +
-      `• Service: ${formData.service}\n` +
+      `• Service: ${getServiceTitle(formData.service)}\n` +
       `• Timeline / Budget: ${formData.budget || 'Flexible'}\n\n` +
       `Project Details:\n${formData.message || 'No additional details provided.'}\n\n` +
       `Sent via hacco digital portal.`
@@ -53,31 +64,111 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   };
 
   const constructEmailSubject = () => {
-    return encodeURIComponent(`[hacco Inquiry] ${formData.service.toUpperCase()} Project - ${formData.name || 'Client'}`);
+    return encodeURIComponent(`[hacco Inquiry] ${getServiceTitle(formData.service)} - ${formData.name || 'Client'}`);
   };
 
   const constructWhatsAppMessage = () => {
-    return encodeURIComponent(
-      `Hello Murad Haco, I'm reaching out regarding a project with hacco:\n\n` +
-      `*Name:* ${formData.name || 'Client'}\n` +
-      `*Service:* ${formData.service}\n` +
-      `*Email:* ${formData.email || 'N/A'}\n` +
-      `*Message:* ${formData.message || 'I would like to discuss an engineering collaboration.'}`
-    );
+    const serviceName = getServiceTitle(formData.service);
+
+    if (currentLang === 'ar') {
+      return encodeURIComponent(
+        `مرحباً مهندس مراد حجو،\n\n` +
+        `أرسل لك طلباً جديداً لمشروع برمجي عبر موقع شركة hacco:\n\n` +
+        `👤 *الاسم:* ${formData.name || 'عميل'}\n` +
+        `📱 *رقم الهاتف:* ${formData.phone || 'غير محدد'}\n` +
+        `✉️ *البريد الإلكتروني:* ${formData.email || 'غير محدد'}\n` +
+        `💻 *نوع الخدمة:* ${serviceName}\n` +
+        `⏱️ *الخطة / الميزانية:* ${formData.budget || 'مرنة'}\n\n` +
+        `📝 *تفاصيل واستفسار المشروع:*\n${formData.message || 'أود مناقشة تفاصيل التعاون والبدء في المشروع.'}\n\n` +
+        `🌐 *مرسل عبر:* منصة hacco الإلكترونية`
+      );
+    } else if (currentLang === 'tr') {
+      return encodeURIComponent(
+        `Merhaba Murad Haco,\n\n` +
+        `hacco web sitesi üzerinden yeni bir proje talebi iletiyorum:\n\n` +
+        `👤 *İsim:* ${formData.name || 'Müşteri'}\n` +
+        `📱 *Telefon:* ${formData.phone || 'Belirtilmedi'}\n` +
+        `✉️ *E-posta:* ${formData.email || 'Belirtilmedi'}\n` +
+        `💻 *Hizmet:* ${serviceName}\n` +
+        `⏱️ *Bütçe / Takvim:* ${formData.budget || 'Esnek'}\n\n` +
+        `📝 *Proje Detayları:*\n${formData.message || 'Proje ve iş birliği detaylarını görüşmek istiyorum.'}\n\n` +
+        `🌐 *Gönderen:* hacco dijital portalı`
+      );
+    } else {
+      return encodeURIComponent(
+        `Hello Murad Haco,\n\n` +
+        `I am reaching out regarding a new software project inquiry from the hacco website:\n\n` +
+        `👤 *Name:* ${formData.name || 'Client'}\n` +
+        `📱 *Phone:* ${formData.phone || 'Not provided'}\n` +
+        `✉️ *Email:* ${formData.email || 'Not provided'}\n` +
+        `💻 *Service:* ${serviceName}\n` +
+        `⏱️ *Budget / Timeline:* ${formData.budget || 'Flexible'}\n\n` +
+        `📝 *Project Overview:*\n${formData.message || 'I would like to discuss an engineering collaboration.'}\n\n` +
+        `🌐 *Sent via:* hacco digital portal`
+      );
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const getDirectWhatsAppUrl = () => {
+    return `https://api.whatsapp.com/send?phone=${PHONE_CLEAN}&text=${constructWhatsAppMessage()}`;
+  };
+
+  const defaultGreetingWhatsAppUrl = `https://api.whatsapp.com/send?phone=${PHONE_CLEAN}&text=${encodeURIComponent(
+    currentLang === 'ar'
+      ? 'مرحباً مهندس مراد حجو، أتواصل معك من موقع hacco بخصوص استفسار عن مشروع برمجي جديد.'
+      : currentLang === 'tr'
+      ? 'Merhaba Murad Haco, hacco web sitesinden yeni bir yazılım projesi için ulaşıyorum.'
+      : 'Hello Murad Haco, I am reaching out from the hacco website regarding a new software project.'
+  )}`;
+
+  const handleSendWhatsApp = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!formData.name.trim() || !formData.message.trim()) {
+      setValidationError(
+        currentLang === 'ar'
+          ? 'يرجى كتابة اسمك وتفاصيل رسالتك للإرسال مباشرة إلى واتساب.'
+          : currentLang === 'tr'
+          ? 'Lütfen WhatsApp ile göndermeden önce adınızı ve mesajınızı yazın.'
+          : 'Please enter your name and project details before sending via WhatsApp.'
+      );
+      return;
+    }
+    setValidationError('');
+    setSendMethod('whatsapp');
+    setLoading(true);
+
+    const waUrl = getDirectWhatsAppUrl();
+
+    setTimeout(() => {
+      setLoading(false);
+      setSubmitted(true);
+      // Directly trigger native app / WhatsApp web transition
+      window.location.href = waUrl;
+    }, 300);
+  };
+
+  const handleSendEmail = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!formData.name.trim() || !formData.message.trim()) {
+      setValidationError(
+        currentLang === 'ar'
+          ? 'يرجى كتابة الاسم والرسالة أولاً.'
+          : currentLang === 'tr'
+          ? 'Lütfen önce adınızı ve mesajınızı girin.'
+          : 'Please enter your name and message first.'
+      );
+      return;
+    }
+    setValidationError('');
+    setSendMethod('email');
     setLoading(true);
 
     setTimeout(() => {
       setLoading(false);
       setSubmitted(true);
-
-      // Trigger default mailto automatically for smooth native email client integration
       const mailtoUrl = `mailto:${GMAIL_ADDRESS}?subject=${constructEmailSubject()}&body=${constructEmailBody()}`;
       window.location.href = mailtoUrl;
-    }, 600);
+    }, 400);
   };
 
   const openGmailWeb = () => {
@@ -86,8 +177,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   };
 
   const openWhatsApp = () => {
-    const waUrl = `https://wa.me/${PHONE_CLEAN}?text=${constructWhatsAppMessage()}`;
-    window.open(waUrl, '_blank', 'noopener,noreferrer');
+    window.location.href = getDirectWhatsAppUrl();
   };
 
   return (
@@ -195,7 +285,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     </span>
                   </div>
                   <a
-                    href={`https://wa.me/${PHONE_CLEAN}`}
+                    href={defaultGreetingWhatsAppUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block text-base sm:text-lg font-mono font-bold text-white hover:text-emerald-300 transition-colors"
@@ -204,7 +294,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   </a>
                   <div className="mt-3 grid grid-cols-2 gap-2">
                     <a
-                      href={`https://wa.me/${PHONE_CLEAN}`}
+                      href={defaultGreetingWhatsAppUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-semibold border border-emerald-500/30 transition-colors"
@@ -258,45 +348,65 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             <div className="relative z-10">
               {submitted ? (
                 <div className="py-8 text-center space-y-6 animate-in fade-in zoom-in-95 duration-200">
-                  <div className="w-16 h-16 mx-auto rounded-2xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shadow-lg">
+                  <div className={`w-16 h-16 mx-auto rounded-2xl ${sendMethod === 'whatsapp' ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400' : 'bg-cyan-500/20 border-cyan-500/30 text-cyan-400'} border flex items-center justify-center shadow-lg`}>
                     <Check className="w-8 h-8" />
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold text-white mb-2">
-                      {t.contact.form.successTitle}
+                      {sendMethod === 'whatsapp'
+                        ? (currentLang === 'ar' ? 'جاهز للإرسال الفوري عبر واتساب!' : currentLang === 'tr' ? 'WhatsApp ile Gönderime Hazır!' : 'Ready to Send via WhatsApp!')
+                        : t.contact.form.successTitle}
                     </h3>
                     <p className="text-slate-300 text-sm max-w-md mx-auto leading-relaxed">
-                      {t.contact.form.successMsg}
+                      {sendMethod === 'whatsapp'
+                        ? (currentLang === 'ar'
+                            ? 'تم تجهيز رسالتك بكل التفاصيل لتصل مباشرة إلى هاتف المهندس مراد حجو (+90 531 966 6195). إذا لم يفتح واتساب تلقائياً، اضغط على الزر الأخضر أدناه:'
+                            : currentLang === 'tr'
+                            ? 'Mesajınız tüm detaylarıyla Murad Haco\'nun telefonuna (+90 531 966 6195) iletilmek üzere hazırlandı. WhatsApp otomatik açılmadıysa aşağıdaki butona tıklayın:'
+                            : 'Your inquiry has been pre-formatted for delivery directly to Murad Haco\'s phone (+90 531 966 6195). If WhatsApp did not open automatically, tap below:')
+                        : t.contact.form.successMsg}
                     </p>
                   </div>
 
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                    <a
+                      href={getDirectWhatsAppUrl()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-sm shadow-lg shadow-emerald-500/20 transition-all cursor-pointer"
+                    >
+                      <MessageSquare className="w-4 h-4" />
+                      <span>{t.contact.form.sendViaWhatsapp}</span>
+                    </a>
+
                     <button
                       onClick={openGmailWeb}
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/20 transition-all cursor-pointer"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-cyan-300 font-bold text-sm border border-cyan-500/30 transition-all cursor-pointer"
                     >
                       <Mail className="w-4 h-4" />
                       <span>{t.contact.form.sendViaEmail}</span>
                     </button>
-
-                    <button
-                      onClick={openWhatsApp}
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg shadow-emerald-600/20 transition-all cursor-pointer"
-                    >
-                      <MessageSquare className="w-4 h-4" />
-                      <span>{t.contact.form.sendViaWhatsapp}</span>
-                    </button>
                   </div>
 
                   <button
-                    onClick={() => setSubmitted(false)}
+                    onClick={() => {
+                      setSubmitted(false);
+                      setValidationError('');
+                    }}
                     className="text-xs text-slate-400 hover:text-white transition-colors underline pt-4 cursor-pointer block mx-auto"
                   >
                     {t.contact.form.resetBtn}
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSendWhatsApp} className="space-y-6">
+                  {/* Validation Error Notice if any */}
+                  {validationError && (
+                    <div className="p-3.5 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs font-medium text-center animate-in fade-in duration-150">
+                      {validationError}
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {/* Name */}
                     <div>
@@ -316,11 +426,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     {/* Email */}
                     <div>
                       <label className="block text-xs font-semibold text-slate-300 mb-2 uppercase tracking-wider">
-                        {t.contact.form.emailLabel} <span className="text-cyan-400">*</span>
+                        {t.contact.form.emailLabel}
                       </label>
                       <input
                         type="email"
-                        required
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder={t.contact.form.emailPlaceholder}
@@ -399,21 +508,42 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     />
                   </div>
 
-                  {/* Submit CTA */}
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-base shadow-xl shadow-cyan-950/70 hover:shadow-cyan-500/25 transition-all duration-200 cursor-pointer disabled:opacity-50"
-                  >
-                    {loading ? (
-                      <span>{t.contact.form.submitting}</span>
-                    ) : (
-                      <>
-                        <Send className="w-4 h-4 rtl:rotate-180" />
-                        <span>{t.contact.form.submitBtn}</span>
-                      </>
-                    )}
-                  </button>
+                  {/* Submit Actions: Direct WhatsApp (Primary) and Email (Secondary) */}
+                  <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={handleSendWhatsApp}
+                      disabled={loading}
+                      id="btn-send-whatsapp-direct"
+                      className="flex-1 inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-white font-bold text-sm sm:text-base shadow-xl shadow-emerald-950/70 hover:shadow-emerald-500/25 transition-all duration-200 cursor-pointer disabled:opacity-50"
+                    >
+                      {loading && sendMethod === 'whatsapp' ? (
+                        <span>{t.contact.form.submitting}</span>
+                      ) : (
+                        <>
+                          <MessageSquare className="w-5 h-5 shrink-0" />
+                          <span>{t.contact.form.sendViaWhatsappDirect}</span>
+                        </>
+                      )}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleSendEmail}
+                      disabled={loading}
+                      id="btn-send-email-direct"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-4 rounded-xl bg-slate-800 hover:bg-slate-700 border border-white/10 hover:border-cyan-500/40 text-slate-200 hover:text-white font-semibold text-sm transition-all duration-200 cursor-pointer disabled:opacity-50"
+                    >
+                      {loading && sendMethod === 'email' ? (
+                        <span>{t.contact.form.submitting}</span>
+                      ) : (
+                        <>
+                          <Mail className="w-4 h-4 text-cyan-400 shrink-0" />
+                          <span>{t.contact.form.sendViaEmailDirect}</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </form>
               )}
             </div>
