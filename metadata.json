@@ -1,0 +1,6 @@
+{
+  "name": "hacco - Software Engineering & Digital Solutions",
+  "description": "Ultra-modern multi-language digital agency website for hacco, specializing in cutting-edge web and mobile app development.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
