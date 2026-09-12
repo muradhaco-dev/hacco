@@ -37,7 +37,7 @@ export const ReviewsAndResults: React.FC<ReviewsAndResultsProps> = ({
   return (
     <section
       id="reviews-and-results"
-      className={`relative ${isStandalonePage ? 'pt-28 pb-20 sm:pt-36 sm:pb-28' : 'py-20 sm:py-28'} overflow-hidden`}
+      className={`relative ${isStandalonePage ? 'pt-36 pb-20 sm:pt-40 sm:pb-28' : 'py-20 sm:py-28'} overflow-hidden`}
     >
       {/* Ambient background glows */}
       <div className="absolute top-1/4 start-10 w-96 h-96 bg-cyan-600/10 rounded-full blur-[140px] pointer-events-none -z-10" />

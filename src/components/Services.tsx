@@ -86,7 +86,7 @@ export const Services: React.FC<ServicesProps> = ({
   return (
     <section
       id="services"
-      className={`relative ${isStandalonePage ? 'pt-28 pb-20 sm:pt-36 sm:pb-28' : 'py-24 sm:py-32'} bg-[#080B10]/50`}
+      className={`relative ${isStandalonePage ? 'pt-36 pb-20 sm:pt-40 sm:pb-28' : 'py-24 sm:py-32'} bg-[#080B10]/50`}
     >
       {/* Background divider line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />

@@ -116,7 +116,7 @@ export const systemCluster = defineSystem({
   }[currentLang];
 
   return (
-    <section id="home" className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
+    <section id="home" className="relative pt-36 sm:pt-40 md:pt-44 pb-20 md:pb-28 overflow-hidden">
       {/* Dynamic Ambient Optical Glows */}
       <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[700px] md:w-[1050px] h-[450px] bg-gradient-to-b from-cyan-500/15 via-blue-600/10 to-transparent rounded-full blur-[150px] pointer-events-none -z-10" />
       <div className="absolute top-1/3 start-10 w-[450px] h-[450px] bg-teal-500/8 rounded-full blur-[160px] pointer-events-none -z-10" />
@@ -132,20 +132,20 @@ export const systemCluster = defineSystem({
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           {/* Left Column: Master Presentation */}
           <div className="lg:col-span-7 flex flex-col items-start text-start">
             {/* Live Availability Status Pill */}
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-cyan-500/30 text-cyan-300 text-xs sm:text-sm font-medium mb-6 shadow-lg shadow-cyan-950/30 backdrop-blur-xl group hover:border-cyan-400 transition-colors">
-              <span className="flex h-2.5 w-2.5 relative">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 border border-cyan-500/30 text-cyan-300 text-[11px] sm:text-xs md:text-sm font-medium mb-5 sm:mb-6 shadow-lg shadow-cyan-950/30 backdrop-blur-xl group hover:border-cyan-400 transition-colors max-w-full">
+              <span className="flex h-2.5 w-2.5 relative shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-80"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 shadow-sm shadow-emerald-500"></span>
               </span>
-              <span className="font-semibold tracking-wide">{liveBadgeText}</span>
+              <span className="font-semibold tracking-wide truncate sm:whitespace-normal">{liveBadgeText}</span>
             </div>
 
             {/* Main Grand Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.12] mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.2] sm:leading-[1.14] mb-5 sm:mb-6 break-words">
               {t.hero.headlinePart1}
               <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-teal-300">
                 {t.hero.headlineHighlight}
@@ -155,16 +155,16 @@ export const systemCluster = defineSystem({
             </h1>
 
             {/* Refined Subtitle */}
-            <p className="text-base sm:text-lg lg:text-xl text-slate-300/90 leading-relaxed mb-8 max-w-2xl font-normal">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-300/90 leading-relaxed mb-6 sm:mb-8 max-w-2xl font-normal">
               {t.hero.subtitle}
             </p>
 
             {/* Action CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto mb-10">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto mb-8 sm:mb-10">
               <button
                 onClick={() => handleAction('contact')}
                 id="hero-contact-btn"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 hover:text-black font-bold text-base shadow-xl shadow-cyan-950/70 hover:shadow-cyan-500/25 transition-all duration-200 cursor-pointer group"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 hover:text-black font-bold text-sm sm:text-base shadow-xl shadow-cyan-950/70 hover:shadow-cyan-500/25 transition-all duration-200 cursor-pointer group"
               >
                 <span>{t.hero.contactUs}</span>
                 <ArrowRight className="w-4 h-4 rtl:rotate-180 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform" />
@@ -173,16 +173,16 @@ export const systemCluster = defineSystem({
               <button
                 onClick={() => handleAction('services')}
                 id="hero-explore-btn"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-white/10 hover:border-cyan-500/40 text-slate-200 hover:text-white font-semibold text-base transition-all duration-200 cursor-pointer backdrop-blur-xl"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3.5 sm:py-4 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-white/10 hover:border-cyan-500/40 text-slate-200 hover:text-white font-semibold text-sm sm:text-base transition-all duration-200 cursor-pointer backdrop-blur-xl"
               >
                 <span>{t.hero.exploreServices}</span>
               </button>
             </div>
 
             {/* Lead Architect Direct Contact Bar */}
-            <div className="w-full max-w-2xl p-4 rounded-2xl bg-slate-900/80 border border-white/10 backdrop-blur-xl mb-10 flex flex-wrap items-center justify-between gap-4">
+            <div className="w-full max-w-2xl p-3.5 sm:p-4 rounded-2xl bg-slate-900/80 border border-white/10 backdrop-blur-xl mb-8 sm:mb-10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-bold font-mono text-sm">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-bold font-mono text-sm shrink-0">
                   MH
                 </div>
                 <div>
@@ -198,21 +198,21 @@ export const systemCluster = defineSystem({
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="grid grid-cols-2 sm:flex items-center gap-2">
                 <a
                   href="https://wa.me/905319666195"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-xs font-semibold transition-colors"
+                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-xs font-semibold transition-colors"
                 >
-                  <MessageSquare className="w-3.5 h-3.5" />
+                  <MessageSquare className="w-3.5 h-3.5 shrink-0" />
                   <span>WhatsApp</span>
                 </a>
                 <a
                   href="mailto:muradhaco@gmail.com"
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 text-xs font-semibold transition-colors"
+                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 text-xs font-semibold transition-colors"
                 >
-                  <Mail className="w-3.5 h-3.5" />
+                  <Mail className="w-3.5 h-3.5 shrink-0" />
                   <span>Gmail</span>
                 </a>
               </div>
@@ -291,7 +291,7 @@ export const systemCluster = defineSystem({
               </div>
 
               {/* Interactive Console Tabs */}
-              <div className="flex items-center bg-[#070b12] border-b border-white/10 px-2 pt-2 gap-1">
+              <div className="flex items-center bg-[#070b12] border-b border-white/10 px-2 pt-2 gap-1 overflow-x-auto no-scrollbar">
                 <button
                   onClick={() => setActiveConsoleTab('architecture')}
                   className={`flex items-center gap-1.5 px-3.5 py-2 text-xs font-mono rounded-t-lg transition-all cursor-pointer ${

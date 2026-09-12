@@ -33,7 +33,7 @@ export const WhatsAppFloatingButton: React.FC<WhatsAppFloatingButtonProps> = ({ 
   const t = titles[currentLang];
 
   return (
-    <div className="fixed bottom-6 end-6 z-40 flex flex-col items-end">
+    <div className="fixed bottom-20 sm:bottom-6 end-4 sm:end-6 z-40 flex flex-col items-end">
       {/* Quick modal popup when opened */}
       {isOpen && (
         <div className="mb-3 w-72 rounded-2xl bg-slate-900/95 border border-cyan-500/30 p-4 shadow-2xl backdrop-blur-xl animate-in zoom-in-95 duration-150 text-start">

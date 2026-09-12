@@ -93,7 +93,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   return (
     <section
       id="contact"
-      className={`relative ${isStandalonePage ? 'pt-28 pb-20 sm:pt-36 sm:pb-28' : 'py-24 sm:py-32'} bg-[#06080D]/40`}
+      className={`relative ${isStandalonePage ? 'pt-36 pb-20 sm:pt-40 sm:pb-28' : 'py-24 sm:py-32'} bg-[#06080D]/40`}
     >
       {/* Glow gradient blobs */}
       <div className="absolute top-1/3 end-10 w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[150px] pointer-events-none -z-10" />

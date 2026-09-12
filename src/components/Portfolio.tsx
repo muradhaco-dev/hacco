@@ -31,7 +31,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ currentLang, isStandaloneP
   return (
     <section
       id="portfolio"
-      className={`relative ${isStandalonePage ? 'pt-28 pb-20 sm:pt-36 sm:pb-28' : 'py-24 sm:py-32'} bg-[#080B10]/40`}
+      className={`relative ${isStandalonePage ? 'pt-36 pb-20 sm:pt-40 sm:pb-28' : 'py-24 sm:py-32'} bg-[#080B10]/40`}
     >
       {/* Background ambient lighting */}
       <div className="absolute top-1/2 left-1/3 w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[160px] pointer-events-none -z-10" />

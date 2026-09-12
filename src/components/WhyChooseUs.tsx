@@ -57,7 +57,7 @@ export const WhyChooseUs: React.FC<WhyChooseUsProps> = ({ currentLang, isStandal
   return (
     <section
       id="why-us"
-      className={`relative ${isStandalonePage ? 'pt-28 pb-20 sm:pt-36 sm:pb-28' : 'py-24 sm:py-32'} bg-[#06080D]/50`}
+      className={`relative ${isStandalonePage ? 'pt-36 pb-20 sm:pt-40 sm:pb-28' : 'py-24 sm:py-32'} bg-[#06080D]/50`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
